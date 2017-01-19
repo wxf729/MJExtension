@@ -53,3 +53,4 @@ return self; \
 }
 
 #define MJExtensionCodingImplementation MJCodingImplementation
+

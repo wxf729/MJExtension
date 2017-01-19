@@ -9,6 +9,7 @@
 #import "MJStudent.h"
 
 @implementation MJStudent
+
 //+ (NSDictionary *)mj_replacedKeyFromPropertyName
 //{
 //    return @{@"ID" : @"id",
@@ -19,4 +20,5 @@
 //             @"bag" : @"other.bag"
 //             };
 //}
+
 @end

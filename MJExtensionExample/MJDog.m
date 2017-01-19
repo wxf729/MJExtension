@@ -7,12 +7,17 @@
 //
 
 #import "MJDog.h"
-//#import "MJExtension.h"
+#import "MJExtension.h"
+
+
 
 @implementation MJDog
 //+ (NSString *)mj_replacedKeyFromPropertyName121:(NSString *)propertyName
 //{
 //    // nickName -> nick_name
-//    return [propertyName underlineFromCamel];
+//    return [propertyName mj_underlineFromCamel];
 //}
+MJExtensionLogAllProperties
 @end
+
+

@@ -19,6 +19,52 @@
 #import "MJBook.h"
 #import "MJBox.h"
 #import <CoreData/CoreData.h>
+#import "NSDate+Additions.h"
+
+
+#define WFDictionary(value) \
+- (NSDictionary *)WFDictionary:(id)value  \
+{ \
+return [NSDictionary dictionaryWithObjectsAndKeys:value,value, nil];\
+}
+#define WF729Dictionary(value) WFDictionary(value)
+
+//单例化一个类
+#define SYNTHESIZE_SINGLETON_FOR_CLASS(classname) \
+\
+static classname *shared##classname = nil; \
+\
++ (classname *)shared##classname \
+{ \
+@synchronized(self) \
+{ \
+if (shared##classname == nil) \
+{ \
+shared##classname = ［self alloc] init]; \
+} \
+} \
+\
+return shared##classname; \
+} \
+\
++ (id)allocWithZone:(NSZone *)zone \
+{ \
+@synchronized(self) \
+{ \
+if (shared##classname == nil) \
+{ \
+shared##classname = [super allocWithZone:zone]; \
+return shared##classname; \
+} \
+} \
+\
+return nil; \
+} \
+\
+- (id)copyWithZone:(NSZone *)zone \
+{ \
+return self; \
+}
 
 
 /**
@@ -355,13 +401,14 @@ void coreData()
     MJExtensionLog(@"name=%@, icon=%@, age=%zd, height=%@, money=%@, sex=%d, gay=%d", user.name, user.icon, user.age, user.height, user.money, user.sex, user.gay);
 }
 
+const NSString * ss = @"1";
 /**
  * NSCoding示例
  */
 void coding()
 {
     // 创建模型
-    MJBag *bag = [[MJBag alloc] init];
+    MJBag *bag = [[MJBag alloc] init]; ss = @"111";
     bag.name = @"Red bag";
     bag.price = 200.8;
     
@@ -369,6 +416,8 @@ void coding()
     // 归档
     [NSKeyedArchiver archiveRootObject:bag toFile:file];
     
+//    NSDictionary * dic = WF729Dictionary(@"icon");
+//    NSLog(@"--- dic: %@",dic);
     // 解档
     MJBag *decodedBag = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
     MJExtensionLog(@"name=%@, price=%f", decodedBag.name, decodedBag.price);
@@ -386,11 +435,24 @@ void replacedKeyFromPropertyName121()
                            @"run_speed" : @"100.9"
                            };
     
+    [MJDog mj_setupReplacedKeyFromPropertyName121:^NSString *(NSString *propertyName) {
+        return [propertyName mj_camelFromUnderline];
+    }];
+    
     // 2.将字典转为MJUser模型
     MJDog *dog = [MJDog mj_objectWithKeyValues:dict];
     
     // 3.打印MJUser模型的属性
     MJExtensionLog(@"nickName=%@, scalePrice=%f runSpeed=%f", dog.nickName, dog.salePrice, dog.runSpeed);
+    
+    
+    [MJDog mj_setupReplacedKeyFromPropertyName121:^id(NSString *propertyName) {
+        
+        return [propertyName mj_underlineFromCamel];
+    }];
+    MJDog *dog2 = [MJDog mj_objectWithKeyValues:dict];
+
+    MJExtensionLog(@"dog: %@",dog2);
 }
 
 /**
@@ -403,6 +465,24 @@ void newValueFromOldValue()
                            @"name" : @"5分钟突破iOS开发",
                            @"publishedTime" : @"2011-09-10"
                            };
+#if 0
+    [MJBook mj_setupNewValueFromOldValue:^id(id object, id oldValue, MJProperty *property) {
+        if ([property.name isEqualToString:@"publisher"]) {
+            if (oldValue == nil || [oldValue isKindOfClass:[NSNull class]]) return @"";
+        } else if (property.type.typeClass == [NSDate class]) {
+            NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+            fmt.dateFormat = @"yyyy-MM-dd";
+            return [fmt dateFromString:oldValue];
+        }
+        
+        return oldValue;
+    }];
+#endif
+    
+    NSString * dateStr = @"2008-07-29 00:00:00";
+    NSDate * date = [NSDate wf_dateFromDateStr:dateStr];
+    NSDate * date2 = [NSDate wf_dateFromDateStr2:dateStr];
+    
     
     // 2.将字典转为MJUser模型
     MJBook *book = [MJBook mj_objectWithKeyValues:dict];
@@ -431,3 +511,6 @@ void execute(void (*fn)(), NSString *comment)
     fn();
     MJExtensionLog(@"[******************%@******************结尾]\n ", comment);
 }
+
+
+

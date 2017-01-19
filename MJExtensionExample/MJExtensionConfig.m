@@ -72,9 +72,9 @@
     // 相当于在MJStudent.m中实现了+(NSDictionary *)mj_replacedKeyFromPropertyName方法
     
 #pragma mark MJDog的所有驼峰属性转成下划线key去字典中取值
-    [MJDog mj_setupReplacedKeyFromPropertyName121:^NSString *(NSString *propertyName) {
-        return [propertyName mj_underlineFromCamel];
-    }];
+//    [MJDog mj_setupReplacedKeyFromPropertyName121:^NSString *(NSString *propertyName) {
+//        return [propertyName mj_underlineFromCamel];
+//    }];
     // 相当于在MJDog.m中实现了+(NSDictionary *)mj_replacedKeyFromPropertyName121:方法
     
 #pragma mark MJBook的日期处理、字符串nil值处理
