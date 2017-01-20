@@ -50,7 +50,6 @@
     NSDate *date = [formatter dateFromString:dateStr];
     NSLog(@"%@",date);
     
-    
     return [date wf_localDate];
 }
 
